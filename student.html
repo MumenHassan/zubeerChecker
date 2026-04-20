@@ -1,0 +1,498 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>بطاقة الطالب</title>
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&family=Amiri:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --blue:       #1a5fa8;
+    --blue-dark:  #0f3d6e;
+    --blue-light: #dbeafe;
+    --green:      #22c55e;
+    --green-bg:   #f0fdf4;
+    --green-bd:   #86efac;
+    --green-txt:  #166534;
+    --amber-bg:   #fffbeb;
+    --amber-bd:   #fcd34d;
+    --amber-txt:  #92400e;
+    --red-bg:     #fee2e2;
+    --red-bd:     #fca5a5;
+    --red-txt:    #991b1b;
+    --gray-50:    #f8fafc;
+    --gray-100:   #f1f5f9;
+    --gray-200:   #e2e8f0;
+    --gray-400:   #94a3b8;
+    --gray-700:   #334155;
+    --gray-900:   #0f172a;
+    --radius-sm:  10px;
+    --radius-md:  14px;
+    --radius-lg:  20px;
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'Cairo', sans-serif;
+    background: #eef2f7;
+    min-height: 100vh;
+    padding: 0;
+    color: var(--gray-900);
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* ── page shell ── */
+  .page {
+    max-width: 480px;
+    margin: 0 auto;
+    min-height: 100vh;
+    background: #fff;
+    position: relative;
+    box-shadow: 0 0 60px rgba(0,0,0,.12);
+  }
+
+  /* ── header ── */
+  .header {
+    background: linear-gradient(145deg, #1a5fa8 0%, #0f3d6e 100%);
+    padding: 48px 24px 64px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+  .header::before {
+    content: '';
+    position: absolute;
+    top: -40px; left: -40px;
+    width: 180px; height: 180px;
+    border-radius: 50%;
+    background: rgba(255,255,255,.06);
+  }
+  .header::after {
+    content: '';
+    position: absolute;
+    bottom: -60px; right: -30px;
+    width: 220px; height: 220px;
+    border-radius: 50%;
+    background: rgba(255,255,255,.04);
+  }
+  .header-wave {
+    position: absolute;
+    bottom: 0; right: 0; left: 0;
+    height: 36px;
+    background: #fff;
+    border-radius: 50% 50% 0 0 / 100% 100% 0 0;
+  }
+  .logo-ring {
+    width: 72px; height: 72px;
+    border-radius: 50%;
+    background: rgba(255,255,255,.15);
+    border: 2px solid rgba(255,255,255,.3);
+    display: flex; align-items: center; justify-content: center;
+    margin: 0 auto 14px;
+    font-family: 'Amiri', serif;
+    font-size: 30px;
+    color: #fff;
+    position: relative; z-index: 1;
+  }
+  .header h1 {
+    font-size: 20px; font-weight: 900;
+    color: #fff;
+    position: relative; z-index: 1;
+    letter-spacing: .3px;
+  }
+  .header p {
+    font-size: 13px;
+    color: rgba(255,255,255,.75);
+    margin-top: 4px;
+    position: relative; z-index: 1;
+  }
+
+  /* ── body content ── */
+  .content {
+    padding: 0 20px 40px;
+    margin-top: -20px;
+    position: relative;
+    z-index: 2;
+  }
+
+  /* ── identity card ── */
+  .identity-card {
+    background: #fff;
+    border-radius: var(--radius-lg);
+    padding: 20px;
+    box-shadow: 0 8px 30px rgba(0,0,0,.11), 0 2px 8px rgba(0,0,0,.07);
+    border: 0.5px solid rgba(255,255,255,.8);
+    margin-bottom: 18px;
+    animation: slideUp .4s ease both;
+  }
+  .identity-top {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin-bottom: 16px;
+  }
+  .avatar {
+    width: 56px; height: 56px;
+    border-radius: var(--radius-sm);
+    background: var(--blue-light);
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'Amiri', serif;
+    font-size: 22px; font-weight: 700;
+    color: #1e40af;
+    flex-shrink: 0;
+  }
+  .student-name {
+    font-size: 19px; font-weight: 900;
+    color: var(--gray-900);
+    line-height: 1.2;
+  }
+  .student-sub {
+    font-size: 12px;
+    color: var(--gray-400);
+    margin-top: 3px;
+  }
+  .meta-chips {
+    display: flex; gap: 8px;
+  }
+  .meta-chip {
+    flex: 1;
+    background: var(--gray-50);
+    border: 1px solid var(--gray-200);
+    border-radius: var(--radius-sm);
+    padding: 10px 12px;
+  }
+  .meta-chip-label {
+    font-size: 11px; font-weight: 700;
+    color: var(--gray-400);
+    margin-bottom: 3px;
+    letter-spacing: .4px;
+  }
+  .meta-chip-value {
+    font-size: 15px; font-weight: 700;
+    color: var(--gray-900);
+  }
+
+  /* ── alert boxes ── */
+  .alert {
+    border-radius: var(--radius-md);
+    padding: 16px 18px;
+    margin-bottom: 18px;
+    display: flex; align-items: flex-start; gap: 12px;
+    animation: slideUp .45s .1s ease both;
+    opacity: 0;
+  }
+  .alert.warn {
+    background: var(--amber-bg);
+    border: 1px solid var(--amber-bd);
+    box-shadow: 0 4px 16px rgba(245,158,11,.14);
+  }
+  .alert.ok {
+    background: var(--green-bg);
+    border: 1px solid var(--green-bd);
+    box-shadow: 0 4px 16px rgba(34,197,94,.14);
+  }
+  .alert-icon {
+    width: 38px; height: 38px;
+    border-radius: 10px;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+  }
+  .alert.warn .alert-icon { background: #fef3c7; }
+  .alert.ok  .alert-icon { background: #dcfce7; }
+  .alert-title {
+    font-size: 14px; font-weight: 800;
+    margin-bottom: 3px;
+  }
+  .alert.warn .alert-title { color: #92400e; }
+  .alert.ok  .alert-title { color: #166534; }
+  .alert-body {
+    font-size: 13px; line-height: 1.6;
+  }
+  .alert.warn .alert-body { color: #78350f; }
+  .alert.ok  .alert-body  { color: #14532d; }
+
+  /* ── subjects card ── */
+  .subjects-card {
+    background: #fff;
+    border-radius: var(--radius-lg);
+    padding: 18px 20px;
+    box-shadow: 0 4px 18px rgba(0,0,0,.08), 0 1px 4px rgba(0,0,0,.05);
+    border: 0.5px solid var(--gray-200);
+    margin-bottom: 18px;
+    animation: slideUp .5s .18s ease both;
+    opacity: 0;
+  }
+  .subjects-label {
+    font-size: 11px; font-weight: 800;
+    color: var(--gray-400);
+    letter-spacing: .7px;
+    margin-bottom: 12px;
+  }
+  .subject-row {
+    display: flex; align-items: center; gap: 12px;
+    padding: 11px 14px;
+    background: var(--red-bg);
+    border: 0.5px solid var(--red-bd);
+    border-radius: var(--radius-sm);
+    margin-bottom: 8px;
+    transition: transform .15s;
+  }
+  .subject-row:last-child { margin-bottom: 0; }
+  .subject-row:hover { transform: translateX(-2px); }
+  .subject-dot {
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    background: #ef4444;
+    flex-shrink: 0;
+  }
+  .subject-name {
+    font-size: 14px; font-weight: 700;
+    color: var(--gray-900);
+    flex: 1;
+  }
+  .subject-badge {
+    font-size: 11px; font-weight: 700;
+    color: var(--red-txt);
+    background: #fecaca;
+    padding: 3px 10px;
+    border-radius: 20px;
+  }
+
+  /* ── wa button ── */
+  .wa-btn {
+    display: flex; align-items: center; justify-content: center; gap: 10px;
+    width: 100%;
+    padding: 15px;
+    background: #22c55e;
+    border-radius: var(--radius-md);
+    border: none;
+    color: #fff;
+    font-family: 'Cairo', sans-serif;
+    font-size: 15px; font-weight: 800;
+    cursor: pointer;
+    text-decoration: none;
+    box-shadow: 0 6px 20px rgba(34,197,94,.35);
+    transition: transform .15s, box-shadow .15s;
+    animation: slideUp .55s .25s ease both;
+    opacity: 0;
+    margin-bottom: 18px;
+  }
+  .wa-btn:hover { transform: translateY(-2px); box-shadow: 0 10px 28px rgba(34,197,94,.4); }
+  .wa-btn:active { transform: translateY(0); }
+
+  /* ── not found ── */
+  .not-found {
+    text-align: center;
+    padding: 40px 20px;
+    animation: slideUp .4s ease both;
+  }
+  .not-found-icon {
+    width: 72px; height: 72px;
+    border-radius: 50%;
+    background: var(--red-bg);
+    display: flex; align-items: center; justify-content: center;
+    margin: 0 auto 16px;
+  }
+  .not-found h2 { font-size: 17px; font-weight: 800; color: var(--gray-900); margin-bottom: 6px; }
+  .not-found p  { font-size: 13px; color: var(--gray-400); line-height: 1.6; }
+
+  /* ── loading ── */
+  .loading {
+    text-align: center; padding: 60px 20px;
+  }
+  .spinner {
+    width: 40px; height: 40px;
+    border: 3px solid var(--gray-200);
+    border-top-color: var(--blue);
+    border-radius: 50%;
+    animation: spin .7s linear infinite;
+    margin: 0 auto 14px;
+  }
+
+  /* ── footer ── */
+  .footer {
+    text-align: center;
+    padding: 16px 20px;
+    border-top: 1px solid var(--gray-200);
+    margin-top: 8px;
+  }
+  .footer p { font-size: 11px; color: var(--gray-400); line-height: 1.6; }
+
+  /* ── animations ── */
+  @keyframes slideUp {
+    from { opacity: 0; transform: translateY(18px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+  @keyframes spin {
+    to { transform: rotate(360deg); }
+  }
+
+  .identity-card { animation: slideUp .4s ease both; }
+</style>
+</head>
+<body>
+<div class="page">
+
+  <!-- HEADER -->
+  <div class="header">
+    <div class="logo-ring">م</div>
+    <h1>مدرسة المستقبل</h1>
+    <p>نظام متابعة التطبيقات الإلكترونية</p>
+    <div class="header-wave"></div>
+  </div>
+
+  <!-- CONTENT -->
+  <div class="content" id="content">
+    <div class="loading">
+      <div class="spinner"></div>
+      <p style="color:#94a3b8;font-size:13px;">جاري تحميل البيانات...</p>
+    </div>
+  </div>
+
+</div>
+
+<!-- شعبة: يجب أن يكون ملف data.js في نفس المجلد -->
+<!--
+  data.js يجب أن يحتوي على:
+  const STUDENTS_DATA = [
+    { name: "أحمد محمد", id: "001", class: "10أ", subjects: ["الرياضيات", "العلوم"], phone: "+97450012345" },
+    ...
+  ];
+-->
+<script src="data.js"></script>
+<script>
+(function () {
+  // ── قراءة اسم الطالب من الرابط ──
+  const params = new URLSearchParams(window.location.search);
+  const studentName = (params.get('name') || '').trim();
+
+  // ── البحث في البيانات ──
+  const data = (typeof STUDENTS_DATA !== 'undefined') ? STUDENTS_DATA : [];
+  const student = data.find(s => s.name === studentName);
+
+  const content = document.getElementById('content');
+
+  setTimeout(() => {
+    if (!studentName) {
+      renderNotFound('لم يتم تحديد اسم الطالب', 'تأكد من أن الرابط يحتوي على اسم الطالب');
+      return;
+    }
+    if (!student) {
+      renderNotFound('الطالب غير موجود', `لم يتم العثور على بيانات للطالب "${studentName}"`);
+      return;
+    }
+    renderStudent(student);
+  }, 600);
+
+  // ── عرض بيانات الطالب ──
+  function renderStudent(s) {
+    const subjects = [...new Set(s.subjects || [])].filter(Boolean);
+    const hasPending = subjects.length > 0;
+
+    // رسالة واتساب
+    const baseUrl = window.location.origin + window.location.pathname;
+    const link = `${baseUrl}?name=${encodeURIComponent(s.name)}`;
+    const waMsg = encodeURIComponent(
+      `السلام عليكم ${s.name}،\nيرجى حل التطبيقات الإلكترونية في المواد التالية:\n` +
+      subjects.map(sub => `• ${sub}`).join('\n') +
+      `\n\nذلك يؤثر على الدرجة النهائية.\nرابط صفحتك: ${link}`
+    );
+    const phone = (s.phone || '').replace(/[^0-9+]/g, '');
+    const waLink = phone ? `https://wa.me/${phone}?text=${waMsg}` : `https://wa.me/?text=${waMsg}`;
+
+    content.innerHTML = `
+      <!-- بطاقة الهوية -->
+      <div class="identity-card">
+        <div class="identity-top">
+          <div class="avatar">${s.name[0] || '؟'}</div>
+          <div>
+            <div class="student-name">${s.name}</div>
+            <div class="student-sub">الرقم: ${s.id || '—'} · الشعبة: ${s.class || '—'}</div>
+          </div>
+        </div>
+        <div class="meta-chips">
+          <div class="meta-chip">
+            <div class="meta-chip-label">الرقم الشخصي</div>
+            <div class="meta-chip-value">${s.id || '—'}</div>
+          </div>
+          <div class="meta-chip">
+            <div class="meta-chip-label">الشعبة الصفية</div>
+            <div class="meta-chip-value">${s.class || '—'}</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- تنبيه الحالة -->
+      ${hasPending ? `
+      <div class="alert warn">
+        <div class="alert-icon">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#d97706" stroke-width="2.5">
+            <path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/>
+            <line x1="12" y1="9" x2="12" y2="13"/>
+            <line x1="12" y1="17" x2="12.01" y2="17"/>
+          </svg>
+        </div>
+        <div>
+          <div class="alert-title">تنبيه مهم</div>
+          <div class="alert-body">يرجى حل التطبيقات الإلكترونية في المواد المذكورة أدناه، حيث يؤثر ذلك على درجتك النهائية.</div>
+        </div>
+      </div>
+
+      <!-- قائمة المواد -->
+      <div class="subjects-card">
+        <div class="subjects-label">المواد غير المسلّمة — ${subjects.length} مادة</div>
+        ${subjects.map(sub => `
+          <div class="subject-row">
+            <div class="subject-dot"></div>
+            <span class="subject-name">${sub}</span>
+            <span class="subject-badge">لم يُسلَّم</span>
+          </div>`).join('')}
+      </div>
+
+      <!-- زر واتساب -->
+      <a class="wa-btn" href="${waLink}" target="_blank">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+          <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
+        </svg>
+        تواصل مع المعلم عبر واتساب
+      </a>` : `
+      <div class="alert ok">
+        <div class="alert-icon">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#16a34a" stroke-width="2.5">
+            <polyline points="20 6 9 17 4 12"/>
+          </svg>
+        </div>
+        <div>
+          <div class="alert-title">أحسنت! جميع التطبيقات مكتملة</div>
+          <div class="alert-body">لا توجد مواد متأخرة. استمر في التميز والمثابرة.</div>
+        </div>
+      </div>`}
+
+      <div class="footer">
+        <p>هذه الصفحة خاصة بالطالب ${s.name}<br>وتُرسل تلقائياً من نظام متابعة التطبيقات الإلكترونية</p>
+      </div>`;
+  }
+
+  // ── عرض خطأ ──
+  function renderNotFound(title, msg) {
+    content.innerHTML = `
+      <div class="not-found">
+        <div class="not-found-icon">
+          <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#ef4444" stroke-width="2">
+            <circle cx="12" cy="12" r="10"/>
+            <line x1="15" y1="9" x2="9" y2="15"/>
+            <line x1="9" y1="9" x2="15" y2="15"/>
+          </svg>
+        </div>
+        <h2>${title}</h2>
+        <p>${msg}</p>
+      </div>
+      <div class="footer"><p>تواصل مع معلمك للحصول على الرابط الصحيح</p></div>`;
+  }
+})();
+</script>
+</body>
+</html>
